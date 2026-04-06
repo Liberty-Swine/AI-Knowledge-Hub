@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: AI-Knowledge-Hub
+  ai:
+    ollama:
+      base-url: http://localhost:11434 #本地ollama模型地址
+      chat:
+        options:
+          model: qwen2:7b-instruct
+          format: json
+server:
+  port: 8085
