@@ -6,7 +6,19 @@ spring:
       base-url: http://localhost:11434 #本地ollama模型地址
       chat:
         options:
-          model: qwen2:7b-instruct
+          model: qwen2:7b-instruct # 模型名称
           format: json
 server:
   port: 8085
+
+# MinIO 配置
+minio:
+  endpoint: http://127.0.0.1:9000 # MinIO 服务地址（本地/服务器）
+  access-key: myadmin          # 访问密钥
+  secret-key: mypassword123       # 秘钥
+  bucket-name: kb-files           # 文件存储桶（需提前创建）
+  file-url-expire: 3600           # 文件预览URL过期时间（秒）
+  connect-timeout: 5000           # 连接超时（毫秒）
+  write-timeout: 30000            # 写入超时（毫秒）
+  read-timeout: 30000             # 读取超时（毫秒）
+  retry-count: 3                  # 失败重试次数
