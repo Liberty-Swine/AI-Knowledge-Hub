@@ -46,7 +46,16 @@
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
+                <!--1.1.2版本对es有冲突-->
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- 关键：添加 Jackson BOM 强制统一版本 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -64,42 +73,26 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- DashScope ChatModel 支持（如果使用其他模型，请跳转 Spring AI 文档选择对应的 starter） -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.alibaba.cloud.ai</groupId>-->
-        <!--            <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>-->
-        <!--            <version>1.1.2.0</version>-->
-        <!--        </dependency>-->
-
         <!-- Spring AI Alibaba Agent Framework（保留编排能力） -->
         <dependency>
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-agent-framework</artifactId>
         </dependency>
-
         <!-- 关键3：Ollama 模型 starter（由 BOM 管理版本，无需写 version） -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-vector-store-elasticsearch</artifactId>
+        </dependency>
         <!-- MinIO 核心依赖 -->
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>8.5.7</version> <!-- 稳定版，兼容Spring Boot 3.x -->
+            <version>8.5.7</version>
         </dependency>
-
-        <!-- Spring AI Vector Store 提供向量存储能力 -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.ai</groupId>-->
-<!--            <artifactId>spring-ai-starter-vector-store-elasticsearch</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.ai</groupId>-->
-<!--            <artifactId>spring-ai-advisors-vector-store</artifactId>-->
-<!--        </dependency>-->
-
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -117,6 +110,23 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.15.1</version>
+        </dependency>
+        <!--提取word内容-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+        <!--提取pdf内容-->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
         </dependency>
     </dependencies>
 

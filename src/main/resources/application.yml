@@ -8,8 +8,40 @@ spring:
         options:
           model: qwen2:7b-instruct # 模型名称
           format: json
+      embedding:  # 嵌入向量模型配置（对应 lrs33/bce-embedding-base_v1）
+        model: lrs33/bce-embedding-base_v1  # Ollama 本地模型名
+        options:
+          temperature: 0.0
+          num_ctx: 1024  # 模型上下文窗口
+    vectorstore: # 向量存储配置（Elasticsearch）
+      elasticsearch:
+        index-name: ai_vector_index # 向量存储索引名（自动创建，无需手动建索引）
+        vector-field-name: vector # 顶层向量字段名
+        text-field-name: content # 文本字段名
+        id-field-name: id # 自定义ID字段名
+        dimension: 768  # lrs33/bce-embedding-base_v1 的向量维度为 768（必须匹配）
+        similarity: cosine   # 相似度算法（cosine/l2_norm/dot_product，默认cosine）
+        bulk-size: 50 # ES批量写入大小（与代码中的BATCH_SIZE匹配）
+        refresh-interval: 300s # 索引刷新间隔（减少ES刷盘压力）
+
+  elasticsearch: # Elasticsearch 基础连接配置
+    uris: http://localhost:9200 # ES 服务地址
+    # username: elastic  # 若 ES 开启账号密码，取消注释并填写
+    # password: 123456
+    connection-timeout: 300s # 连接超时
+    socket-timeout: 600s     # 读写超时
+    max-conn-total: 50      # 最大连接数
+    max-conn-per-route: 20  # 每个路由最大连接数
+  servlet:
+    multipart:
+      max-file-size: 600MB # 文件上传大小限制
+      max-request-size: 600MB # 请求大小限制
+
+
 server:
   port: 8085
+
+
 
 # MinIO 配置
 minio:

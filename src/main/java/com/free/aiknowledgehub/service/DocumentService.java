@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 
 /**
  * @Description
@@ -19,27 +21,22 @@ public class DocumentService {
     @Resource
     private MinioUtils minioUtils;
 
+    @Resource
+    private RagAsyncService ragAsyncService;
+
     /**
      * 文件上传
      * @param file
-     * @return
+     * @throws Exception
      */
-    public Boolean uploadDocument(MultipartFile file){
-        String originalFilename = file.getOriginalFilename();
-        try {
-            // 1. 上传文件到MinIO（存储到tech-manual/目录）,todo 文件夹后续要改为配置
-            String objectName = minioUtils.uploadFile(file, "tech-manual/");
-            // 2. 获取预览URL（用于前端展示/溯源）
-            String previewUrl = minioUtils.getFilePreviewUrl(objectName);
-            // 3. 执行文件向量化（知识库核心流程）
-//            String fileId = UUID.randomUUID().toString();
-//            customFileVectorizationService.vectorizeFile(fileId, file.getOriginalFilename());
-            // 4. 数据库操作（省略：存储fileId、objectName、previewUrl、文件类型等）
-        } catch (Exception e) {
-            log.error("文件名称为【{}】的文件上传失败",originalFilename,e);
-        }
-        return true;
+//    @Transactional
+    public void uploadDocument(MultipartFile file){
+        //生成唯一id
+        String documentId = UUID.randomUUID().toString();
+        //上传文件到MinIO
+        String objectName = minioUtils.uploadFile(file, "tech-manual/");
+        //todo 保存文件信息到数据库
+        //异步获取文件内容+文本切片+向量化
+        ragAsyncService.asyncParseAndVectorize(file,documentId);
     }
-
-
 }

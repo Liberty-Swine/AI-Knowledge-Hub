@@ -11,6 +11,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
@@ -96,7 +98,6 @@ public class MinioUtils {
             String ext = FilenameUtils.getExtension(originalFilename);
             String fileName = UUID.randomUUID().toString() + "." + ext;
             String objectName = dir.endsWith("/") ? dir + fileName : dir + "/" + fileName; // 兼容目录结尾无/
-
             // 3. 上传文件（指定ContentType，适配预览）
             PutObjectArgs putArgs = PutObjectArgs.builder()
                     .bucket(minioConfig.getBucketName())
@@ -105,7 +106,6 @@ public class MinioUtils {
                     .contentType(file.getContentType())
                     .build();
             minioClient.putObject(putArgs);
-
             log.info("文件【{}】上传成功，存储路径：{}", originalFilename, objectName);
             return objectName;
         } catch (Exception e) {
@@ -144,6 +144,37 @@ public class MinioUtils {
             log.error("MinIO文件流上传失败，文件名：{}", fileName, e);
             throw new RuntimeException("文件流上传失败：" + e.getMessage());
         }
+    }
+
+    /**
+     * 上传文件到 MinIO，并返回可重复读取的文件流（用于文档解析）,适合小文件
+     * @param bucketName 桶名
+     * @param objectName 文件名
+     * @param inputStream 原始流
+     * @return 复制后的新流（用于解析文本）
+     * @throws Exception
+     */
+    public InputStream  uploadAndCopyStream(String bucketName, String objectName, InputStream inputStream) throws Exception{
+        // 1. 把输入流复制到字节数组（缓存起来，实现流可重复读）
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            baos.write(buffer, 0, len);
+        }
+        byte[] bytes = baos.toByteArray();
+        // 2. 用复制的字节数组上传到 MinIO
+        ByteArrayInputStream uploadStream = new ByteArrayInputStream(bytes);
+        minioClient.putObject(
+                PutObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(objectName)
+                        .stream(uploadStream, bytes.length, -1)
+                        .contentType("application/octet-stream")
+                        .build()
+        );
+        // 3. 返回另一个新流 → 给业务层解析文档用！
+        return new ByteArrayInputStream(bytes);
     }
 
     // ========== 核心操作：文件下载 ==========

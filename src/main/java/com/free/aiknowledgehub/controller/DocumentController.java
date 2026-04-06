@@ -33,11 +33,7 @@ public class DocumentController {
      */
     @PostMapping("/upload")
     Result<Boolean> uploadDocument(@RequestParam("file") MultipartFile file){
-        Boolean result = documentService.uploadDocument(file);
-        if(result){
-            return Result.success();
-        }else {
-            return Result.error("文件上传失败");
-        }
+        documentService.uploadDocument(file);
+        return Result.success();
     }
 }
