@@ -79,9 +79,10 @@ public class MinioUtils {
      * 上传文件到MinIO（MultipartFile方式，适配前端上传）
      * @param file 上传文件（支持doc/pdf/excel/ppt等）
      * @param dir  存储目录（如tech-manual/、product-doc/）
+     * @param fileId  文件id
      * @return 文件在MinIO的存储路径（用于溯源/下载）
      */
-    public String uploadFile(MultipartFile file, String dir) {
+    public String uploadFile(MultipartFile file, String dir,String fileId) {
         // 1. 前置校验
         if (file.isEmpty()) {
             throw new IllegalArgumentException("上传文件不能为空");
@@ -96,7 +97,7 @@ public class MinioUtils {
         try {
             // 2. 生成唯一文件名（避免覆盖，格式：UUID.后缀）
             String ext = FilenameUtils.getExtension(originalFilename);
-            String fileName = UUID.randomUUID().toString() + "." + ext;
+            String fileName = fileId + "." + ext;
             String objectName = dir.endsWith("/") ? dir + fileName : dir + "/" + fileName; // 兼容目录结尾无/
             // 3. 上传文件（指定ContentType，适配预览）
             PutObjectArgs putArgs = PutObjectArgs.builder()

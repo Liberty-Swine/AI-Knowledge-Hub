@@ -7,12 +7,11 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.parser.DocumentParser;
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * @Description
+ * @Description 文件解析工具类
  * @Author: Liberty-Swine
  * @Date 2026/4/6 19:20
  */
@@ -41,7 +40,7 @@ public class DocumentParserUtils {
     }
 
     /**
-     * 解析PDF
+     * 解析PDF todo 缺少pdf中图片的解析
      * @param inputStream
      * @return
      * @throws Exception
