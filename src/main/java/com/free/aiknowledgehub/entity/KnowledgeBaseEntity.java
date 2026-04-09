@@ -8,36 +8,33 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * @Description 对话历史实体（每条问答一行，用于持久化与审计）
+ * @Description 知识库实体（一个知识库包含多个文档与向量分片）
  * @Author: Liberty-Swine
- * @Date 2026/4/7 16:02
+ * @Date 2026/4/9
  */
 @Data
-@TableName("chat_history")
-public class ChatHistoryEntity {
+@TableName("knowledge_base")
+public class KnowledgeBaseEntity {
     @TableId(type = IdType.ASSIGN_UUID)
     /**
-     * 历史记录ID（UUID）
+     * 知识库ID（UUID）
      */
     private String id;
     /**
-     * 关联知识库ID（kbId）
+     * 知识库名称
      */
-    private String kbId;
+    private String name;
     /**
-     * 会话ID（sessionId）
+     * 知识库描述
      */
-    private String sessionId;
-    /**
-     * 用户问题
-     */
-    private String userQuestion;
-    /**
-     * AI 回答
-     */
-    private String aiAnswer;
+    private String description;
     /**
      * 创建时间
      */
     private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }
+

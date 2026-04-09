@@ -7,7 +7,7 @@ import com.free.aiknowledgehub.service.impl.ChatHistoryServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * @Description
+ * @Description 对话历史服务（MySQL 权威存储，基于 MyBatis-Plus CRUD）
  * @Author: Liberty-Swine
  * @Date 2026/4/7 16:12
  */

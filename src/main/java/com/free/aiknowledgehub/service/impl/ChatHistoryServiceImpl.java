@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.free.aiknowledgehub.entity.ChatHistoryEntity;
 
 /**
- * @Description
+ * @Description 对话历史服务接口（预留扩展自定义业务方法）
  * @Author: Liberty-Swine
  * @Date 2026/4/7 16:06
  */

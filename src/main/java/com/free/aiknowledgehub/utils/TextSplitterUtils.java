@@ -24,10 +24,14 @@ public class TextSplitterUtils {
     private final TokenTextSplitter textSplitter = new TokenTextSplitter();
 
     /**
-     * 文本分片，使用textSplitter
-     * @param content
-     * @param documentId
-     * @return
+     * 文本分片（TokenTextSplitter），并写入最基础的元数据。
+     * <p>
+     * 注意：更完整的元数据（kbId/fileName/chunkIndex/sourcePath）会在切片后由服务层补齐，
+     * 以便 RAG 检索过滤、溯源与删除向量。
+     * </p>
+     * @param content    文本内容
+     * @param documentId 文档ID
+     * @return 切片后的 Document 列表
      */
     public List<Document> split(String content, String documentId) {
         // 构建 Spring AI Document（含元数据）

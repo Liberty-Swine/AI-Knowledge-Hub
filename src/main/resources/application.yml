@@ -42,9 +42,21 @@ spring:
       max-file-size: 600MB # 文件上传大小限制
       max-request-size: 600MB # 请求大小限制
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 5s
+
 
 server:
   port: 8085
+
+# JWT 配置（最小可用：可自行改为更安全的随机密钥）
+jwt:
+  secret: "CHANGE_ME_TO_A_LONG_RANDOM_SECRET_32+"
+  expire-seconds: 86400
 
 
 
